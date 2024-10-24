@@ -6,7 +6,7 @@ https://security.tencent.com/index.php/blog/msg/179
 
 
 
-The best SSRF guide I've ever seen. :)
+The best SSRF guide I've ever seen :)
 
 ---
 
