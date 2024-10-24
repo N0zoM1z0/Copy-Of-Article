@@ -80,7 +80,8 @@ DMZ 区可以理解为一个不同于外网或内网的特殊网络区域，DMZ 
 
 
 
-![img](https://cdn.jsdelivr.net/gh/teamssix/BlogImages/imgs/f603918fa0ec08fadb43804a59ee3d6d54fbda98.jfif)
+![image](https://github.com/user-attachments/assets/547619fb-3062-4fbb-a9a5-9659700feec5)
+
 
 
 
