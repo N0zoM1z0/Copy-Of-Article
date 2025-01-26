@@ -38,7 +38,7 @@ phar文件本质上是一种压缩文件，其中每个被压缩文件的权限�
 **4. [optional] a signature for verifying Phar integrity (phar file format only)**
 签名，放在文件末尾，格式如下：
 
-![img](./PHP Phar反序列化攻击/images/20191109112046-eb75bc68-029f-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191109112046-eb75bc68-029f-1.png)
 
 #### 0x02 demo测试
 
@@ -65,7 +65,7 @@ phar文件本质上是一种压缩文件，其中每个被压缩文件的权限�
 
 可以看到meta-data是以序列化的形式存储的：
 
-![img](./PHP Phar反序列化攻击/images/20191105195324-df06c358-ffc2-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195324-df06c358-ffc2-1.png)
 
 #### 0x03将phar伪造成其他格式的文件
 
@@ -88,9 +88,9 @@ phar文件本质上是一种压缩文件，其中每个被压缩文件的权限�
 ?>
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105195351-ef7aacea-ffc2-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195351-ef7aacea-ffc2-1.png)
 
-![img](./PHP Phar反序列化攻击/images/20191105195355-f191ed18-ffc2-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195355-f191ed18-ffc2-1.png)
 
 那么我们看看这个假装自己是图片的phar文件最后的效果。
 
@@ -106,7 +106,7 @@ class TestObject {
 ?>
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105195405-f789e93c-ffc2-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195405-f789e93c-ffc2-1.png)
 
 成功反序列化识别文件内容，采用这种方法可以绕过很大一部分上传检测。
 
@@ -114,7 +114,7 @@ class TestObject {
 
 有序列化数据必然会有反序列化操作，php一大部分的文件系统函数在通过phar://伪协议解析phar文件时，都会将meta-data进行反序列化，测试后受影响的函数如下：
 
-![img](./PHP Phar反序列化攻击/images/20191105195413-fc4b3ca0-ffc2-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195413-fc4b3ca0-ffc2-1.png)
 
 为什么 Phar 会反序列化处理文件并且在文件操作中能够成功反序列化呢？这里需要通过php底层代码才能知道，关于这个问题ZSX师傅的[Phar与Stream Wrapper造成PHP RCE的深入挖掘](https://xz.aliyun.com/t/2958#toc-0)已经详细分析了。
 这里通过一个demo论证一下上述结论。仍然以上面的phar文件为例
@@ -134,7 +134,7 @@ class TestObject {
 ?>
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105195425-03917efc-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195425-03917efc-ffc3-1.png)
 
 这里可以看到已经反序列化成功触发`__destruct`方法并且读取了文件内容。
 其他函数也是可以的，就不一一试了，
@@ -144,7 +144,7 @@ class TestObject {
 $filename = 'compress.zlib://phar://phar.phar/test.txt';
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105195433-0867bc66-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195433-0867bc66-ffc3-1.png)
 
 虽然会警告但仍会执行，它同样适用于`compress.bzip2://`。
 当文件系统函数的参数可控时，我们可以在不调用`unserialize()`的情况下进行反序列化操作，极大的拓展了反序列化攻击面。
@@ -245,13 +245,13 @@ $phar -> stopBuffering();
 
 生成phar文件后，改后缀为gif
 
-![img](./PHP Phar反序列化攻击/images/20191105195522-25bd3a3e-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195522-25bd3a3e-ffc3-1.png)
 
 ```
 payload:un.php?filename=phar://phar.gif/test
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105195529-29d27562-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195529-29d27562-ffc3-1.png)
 
 **例二**
 现在来看一下tp5.2版本的pop链如何利用Phar反序列化，上篇https://xz.aliyun.com/t/6619讲到了tp的pop链构造和利用原理，最后通过我们自己设的反序列化函数触发点。这里放上利用链，不再分析。
@@ -335,11 +335,11 @@ namespace {
 
 这里我们自己在tp入口处也设一个触发点，这个poc是2019Nu1lctf中smi1e出的一道关于[mysql任意文件读取及tp5.2phar反序列化](https://www.smi1e.top/n1ctf2019-sql_manage出题笔记/)的题目，具体我们下面会复现下。
 
-![img](./PHP Phar反序列化攻击/images/20191105195544-32cc30d6-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195544-32cc30d6-ffc3-1.png)
 
 加上test.txt，tp不会报错，不加也会触发。
 
-![img](./PHP Phar反序列化攻击/images/20191105195552-37521e40-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195552-37521e40-ffc3-1.png)
 
 其他师傅用不同的pop链也写了的poc，phar的原理都一样
 
@@ -408,7 +408,7 @@ namespace {
 
 这个POC是wh1t3p1g师傅找的，我将不需要的变量和类去掉了，易理解。
 
-![img](./PHP Phar反序列化攻击/images/20191105195605-3ee7e63a-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195605-3ee7e63a-ffc3-1.png)
 
 ## 导致phar触发的其他地方(sql)
 
@@ -444,7 +444,7 @@ class TestObject {
 ?>
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105195626-4be32a48-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195626-4be32a48-ffc3-1.png)
 
 可以看到mysql进行phar文件读取时成功触发反序列化。
 
@@ -455,19 +455,19 @@ class TestObject {
 这道题给出了源码，用tp5.2写的。因为复现数据库配置做了修改，我就直接说下考点。
 **1.找数据库账号密码**
 
-![img](./PHP Phar反序列化攻击/images/20191105195635-5124fb44-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195635-5124fb44-ffc3-1.png)
 
-![img](./PHP Phar反序列化攻击/images/20191105195641-54962302-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195641-54962302-ffc3-1.png)
 
 账号密码源码给出的，入口是要求我们登录数据库成功。
 **2.绕过验证码，查询sql**
 
-![img](./PHP Phar反序列化攻击/images/20191105195649-5977ed60-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195649-5977ed60-ffc3-1.png)
 
 验证码老梗了这是，写脚本跑出来就行，然后重点是如何构造sql语句，这里不再赘述思路了，实际考的是tp5.2pop链构造phar反序列化，所以我们需要找一个可以目录传上phar文件，然后让Mysql客户端读取文件触发反序列化。
 所以查找可写目录，为了方便复现，这里我将随机验证码去掉了。
 
-![img](./PHP Phar反序列化攻击/images/20191105195656-5d6927b8-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195656-5d6927b8-ffc3-1.png)
 
 可以看到可写目录如上，然后我们构造phar文件上传上去。配置好
 
@@ -502,7 +502,7 @@ namespace {
 **4.正则回溯，绕waf**
 题目中放了个小waf
 
-![img](./PHP Phar反序列化攻击/images/20191105195814-8c420050-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195814-8c420050-ffc3-1.png)
 
 利用p神讲的正则回溯绕过
 将生成的phar文件内容转为16进制提出来
@@ -534,21 +534,21 @@ print(html)
 
 测试是否上传成功。
 
-![img](./PHP Phar反序列化攻击/images/20191105195832-96d8a7f8-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195832-96d8a7f8-ffc3-1.png)
 
 看到文件已经上传成功。
 
 然后修改项目https://github.com/Gifts/Rogue-MySql-Server 把文件名改为phar格式
 
-![img](./PHP Phar反序列化攻击/images/20191105195841-9c6a7e30-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195841-9c6a7e30-ffc3-1.png)
 
 然后运行文件
 
-![img](./PHP Phar反序列化攻击/images/20191105195854-a3da6aa4-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195854-a3da6aa4-ffc3-1.png)
 
 host填写运行文件的主机ip也就是前面vps地址，账号密码随意，进去后执行任意sql触发反序列化监听vps端口反弹shell。
 
-![img](./PHP Phar反序列化攻击/images/20191105195904-a9a22422-ffc3-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105195904-a9a22422-ffc3-1.png)
 
 ## SUCTF2019-Upload labs 2
 
@@ -745,7 +745,7 @@ $phar->stopBuffering();
 echo urlencode(serialize($object));
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105200309-3bcdd08a-ffc4-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105200309-3bcdd08a-ffc4-1.png)
 
 当然这个题解只是非预期解，因为在admin.php中触发命令执行的析构函数`__destruct`，会在程序执行结束销毁对象后执行一次，所以在造成ssrf会自动命令执行，而出题师傅想考的是mysql服务伪造，客户端读取文件触发反序列化造成命令执行，所以将`__destruct`改为了`__wakeup`函数。
 
@@ -847,7 +847,7 @@ logging.info(content)
 conn.close()
 ```
 
-![img](./PHP Phar反序列化攻击/images/20191105200402-5b408408-ffc4-1.png)
+![img](https://xzfile.aliyuncs.com/media/upload/picture/20191105200402-5b408408-ffc4-1.png)
 
 ## 文末
 
