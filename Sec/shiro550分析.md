@@ -1,3 +1,7 @@
+搜索 rememberMeManager
+
+
+
 # Java 反序列化 Shiro 篇 01-Shiro550 流程分析
 
 ## 0x01 前言
