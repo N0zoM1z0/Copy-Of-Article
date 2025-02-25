@@ -1,2 +1,2 @@
 # Copy-Of-Article
-Save copy of some excellent article.
+Save copy of some excellent or 404able article.
